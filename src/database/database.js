@@ -1,6 +1,6 @@
-import  Sequelize  from "sequelize";
 
-export const sequelize = new Sequelize('fripsDB','postgres', '1234', {
-    host: 'localhost',
-    dialect: 'postgres'
-  });
+const  Sequelize = require("sequelize")
+const db = require("/models/index.js")
+
+
+export const sequelize = db.sequelize.authenticate();
