@@ -6,9 +6,6 @@ const  Sequelize = require("sequelize")
 //   res.send('Hola Mundo');
 // });
 
-function addUsuario(name, email, password){
-
-}
 
 async function main() {
   try {
