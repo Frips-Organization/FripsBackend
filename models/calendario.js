@@ -1,31 +1,46 @@
 'use strict';
 const {
-  Model
+    Model, DataTypes
 } = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-  class Calendario extends Model {
+
+class Calendario extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.hasMany(models.Plan, {foreignKey: 'id'})
+        this.hasMany(models.Plan, {foreignKey: 'id'})
     }
-  }
-  Calendario.init({
-    planID: {
-      type: DataTypes.INTEGER,
-      references:{
-        model: 'Plana',
-        id: 'id'
-      }
-    },
-    actividadPlanificada: DataTypes.TEXT,
-    fecha: {type: DataTypes.DATE, allowNull: true, required: false}
-  }, {
-    sequelize,
-    modelName: 'Calendario',
-  });
-  return Calendario;
+    static modelName = 'Calendario';
+}
+
+exports.Calendario = Calendario;
+module.exports = (sequelize) => {
+    Calendario.init({
+        id: {
+            allowNull: false,
+            autoIncrement: true,
+            primaryKey: true,
+            type: DataTypes.INTEGER
+        },
+        planID: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: 'Plans',
+                key: 'id'
+            }
+        },
+        actividadPlanificada: {
+            type: DataTypes.TEXT
+        },
+        fecha: {
+            type: DataTypes.DATE
+        }
+    }, {
+        sequelize,
+        modelName: Calendario.modelName,
+        timestamps: false
+    });
+    return Calendario;
 };

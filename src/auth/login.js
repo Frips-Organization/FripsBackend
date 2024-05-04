@@ -1,26 +1,48 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
+const db = require("../../models");
+const {Usuario} = require("../../models");
+
+
 
 const router = express.Router();
 
 const secret = "MyBadKeptSecret";
 
-router.post("/login", (req, res) => {
-    let username = "";
+router.post("/login", async (req, res,next) => {
+    let email = "";
     let password = "";
 
 
-    username = req.body.user;
+    email = req.body.email;
     password = req.body.password;
 
-    const token = jwt.sign({ user: username, id: "1.23.4" }, secret, {
-        expiresIn: "1 day",
-        algorithm: "HS256",
-        encoding: "UTF-8",
-        issuer: "localhost:3001"
-    });
+    const user = await Usuario.findOne({where: {email: email.toString()}});
+    if(!user){
+        res.status(401).send({error: "Email no encontrado"});
+        next();
+    }else{
+        if(user.password===(password)){
 
-    res.json(token);
+            const token = jwt.sign({user: user.userId, email: user.email }, secret, {
+                expiresIn: "30 minutes",
+                algorithm: "HS256",
+                encoding: "UTF-8",
+                issuer: "localhost:3001"
+            });
+            res.status(200).send({
+                userId: user.userId,
+                email: user.email,
+                accessToken: token
+            });
+
+
+        }else{
+            res.status(401).send({error: "Contrasena incorrecta"});
+        }
+
+    }
+
 
 })
 module.exports = router;
