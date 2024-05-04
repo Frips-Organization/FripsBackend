@@ -3,13 +3,13 @@ const {json} = require("express");
 const router = express.Router();
 const db = require("../../models")
 const {Usuario} = require("../../models")
-router.post("/register", (req, res, next) => {
+router.post("/register", async (req, res, next) => {
     let nombre = req.body.nombre;
     let password = req.body.password;
     let email = req.body.email;
 
     try {
-        Usuario.create({
+        await Usuario.create({
             nombre: nombre,
             password: password,
             email: email
