@@ -29,21 +29,21 @@ module.exports = (sequelize) => {
         itinerario: {
             type: DataTypes.INTEGER,
             references: {
-                model: Itinerario,
+                model: "Itinerario",
                 id: 'itinerario_id'
             },
 
             lugarID: {
                 type: DataTypes.INTEGER,
                 references: {
-                    model: Lugar,
+                    model: "Lugar",
                     id: 'id'
                 }
             },
             usuarioID: {
                 type: DataTypes.INTEGER,
                 references: {
-                    model: Usuario,
+                    model: "Usuario",
                     id: 'userId'
                 }
             },

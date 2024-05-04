@@ -28,14 +28,14 @@ module.exports = (sequelize) => {
         initerarioID: {
             type: DataTypes.INTEGER,
             references: {
-                model: Itinerario,
+                model: "Itinerario",
                 id: 'itinerario_id'
             }
         },
         usuarioID: {
             type: DataTypes.INTEGER,
             references: {
-                model: Usuario,
+                model: "Usuario",
                 id: 'userId'
             }
         },
