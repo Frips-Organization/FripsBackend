@@ -2,25 +2,23 @@
 const {
     Model, DataTypes
 } = require('sequelize');
-const {Usuario} = require("./usuario");
 
-class Itinerario extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-        // define association here
-        this.hasMany(models.Usuario, {foreignKey: 'userId'})
-        this.hasMany(models.GrupoViaje, {foreignKey: 'grupoViajeId'})
-    }
-
-    static modelName = "Itinerario";
-}
-
-exports.Itinerario = Itinerario;
 module.exports = (sequelize) => {
+
+    class Itinerario extends Model {
+        /**
+         * Helper method for defining associations.
+         * This method is not a part of Sequelize lifecycle.
+         * The `models/index` file will call this method automatically.
+         */
+        static associate(models) {
+            // define association here
+            this.hasMany(models.Usuario, {foreignKey: 'userId'})
+            this.hasMany(models.GrupoViaje, {foreignKey: 'grupoViajeId'})
+        }
+
+        static modelName = "Itinerario";
+    }
 
     Itinerario.init({
         itinerario_id: {

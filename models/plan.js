@@ -2,29 +2,24 @@
 const {
     Model, DataTypes
 } = require('sequelize');
-const {Itinerario} = require("./itinerario");
-const {Lugar} = require("./lugar");
-const {Usuario} = require("./usuario");
-
-class Plan extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-        // define association here
-        this.hasOne(models.Usuario, {foreignKey: 'userId'})
-        this.hasOne(models.Itinerario, {foreignKey: 'id'})
-        this.hasOne(models.Lugar, {foreignKey: 'id'})
-    }
-
-    static modelName = "Plan";
-}
-
-exports.Plan = Plan;
 
 module.exports = (sequelize) => {
+    class Plan extends Model {
+        /**
+         * Helper method for defining associations.
+         * This method is not a part of Sequelize lifecycle.
+         * The `models/index` file will call this method automatically.
+         */
+        static associate(models) {
+            // define association here
+            this.hasOne(models.Usuario, {foreignKey: 'userId'})
+            this.hasOne(models.Itinerario, {foreignKey: 'id'})
+            this.hasOne(models.Lugar, {foreignKey: 'id'})
+        }
+
+        static modelName = "Plan";
+    }
+
     Plan.init({
         id: {
             type: DataTypes.INTEGER,
