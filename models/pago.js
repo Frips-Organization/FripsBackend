@@ -1,46 +1,66 @@
 'use strict';
 const {
-    Model
+    Model, DataTypes
 } = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-    class pago extends Model {
-        /**
-         * Helper method for defining associations.
-         * This method is not a part of Sequelize lifecycle.
-         * The `models/index` file will call this method automatically.
-         */
-        static associate(models) {
-            // define association here
-            this.hasMany(models.Usuario, {foreignKey: 'userId'})
-            this.hasMany(models.Itinerario, {foreignKey:'id'})
-        }
+const {Itinerario} = require("./itinerario");
+const {Usuario} = require("./usuario");
+
+class Pago extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+        // define association here
+        this.hasMany(models.Usuario, {foreignKey: 'userId'})
+        this.hasMany(models.Itinerario, {foreignKey: 'id'})
     }
 
-    pago.init({
-        pagoID: {
+    static modelName = "Pago";
+}
+
+exports.Pago = Pago;
+module.exports = (sequelize) => {
+
+
+    Pago.init({
+        pagoId: {
             type: DataTypes.INTEGER,
-            primaryKey: true
+            primaryKey: true,
+            autoIncrement: true,
         },
         initerarioID: {
             type: DataTypes.INTEGER,
             references: {
-                model: 'Itinerarios',
-                id: 'id'
+                model: Itinerario,
+                id: 'itinerario_id'
             }
         },
         usuarioID: {
             type: DataTypes.INTEGER,
-            references:{
-                model: 'Usuarios',
+            references: {
+                model: Usuario,
                 id: 'userId'
             }
         },
         porcentaje: DataTypes.INTEGER,
         monto: DataTypes.INTEGER,
-        descr: DataTypes.TEXT
+        descr: DataTypes.TEXT,
+        createdAt: {
+            allowNull: true,
+            type: DataTypes.DATE,
+            defaultValue: DataTypes.NOW
+        },
+        updatedAt: {
+            allowNull: true,
+            type: DataTypes.DATE,
+            defaultValue: DataTypes.NOW
+        }
     }, {
         sequelize,
-        modelName: 'pago',
+        modelName: Pago.modelName,
     });
-    return pago;
+
+    return Pago;
 };

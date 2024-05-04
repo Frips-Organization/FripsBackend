@@ -1,53 +1,78 @@
 'use strict';
 const {
-  Model
+    Model, DataTypes
 } = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-  class Plan extends Model {
+const {Itinerario} = require("./itinerario");
+const {Lugar} = require("./lugar");
+const {Usuario} = require("./usuario");
+
+class Plan extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
-      this.hasMany(models.Usuario, {foreignKey: 'userId'})
-      this.hasMany(models.Itinerario, {foreignKey:'id'})
-      this.hasMany(models.lugar, {foreignKey:'id'})
+        // define association here
+        this.hasOne(models.Usuario, {foreignKey: 'userId'})
+        this.hasOne(models.Itinerario, {foreignKey: 'id'})
+        this.hasOne(models.Lugar, {foreignKey: 'id'})
     }
-  }
-  Plan.init({
-    initerarioID: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: 'Itinerarios',
-        id: 'id'
-      },
 
-      lugarID: {
-        type:  DataTypes.INTEGER,
-        references:{
-          model: 'lugar',
-          id: 'id'
+    static modelName = "Plan";
+}
+
+exports.Plan = Plan;
+
+module.exports = (sequelize) => {
+    Plan.init({
+        id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
+        },
+        itinerario: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: Itinerario,
+                id: 'itinerario_id'
+            },
+
+            lugarID: {
+                type: DataTypes.INTEGER,
+                references: {
+                    model: Lugar,
+                    id: 'id'
+                }
+            },
+            usuarioID: {
+                type: DataTypes.INTEGER,
+                references: {
+                    model: Usuario,
+                    id: 'userId'
+                }
+            },
+            descripcion: DataTypes.TEXT,
+            horaLlegada: DataTypes.DATE,
+            horaSalida: DataTypes.DATE,
+            puntoPartida: DataTypes.STRING,
+            motivo: DataTypes.TEXT,
+            gastos: DataTypes.INTEGER,
+            createdAt: {
+                allowNull: true,
+                type: DataTypes.DATE,
+                defaultValue: DataTypes.NOW
+            },
+            updatedAt: {
+                allowNull: true,
+                type: DataTypes.DATE,
+                defaultValue: DataTypes.NOW
+            }
         }
-      },
-      usuarioID: {
-        type: DataTypes.INTEGER,
-        references:{
-          model: 'Usuarios',
-          id: 'userId'
-        }
-      },
-      descripcion: DataTypes.TEXT,
-      horaLlegada: DataTypes.STRING,
-      horaSalida: DataTypes.STRING,
-      puntoPartida: DataTypes.STRING,
-      motivo: DataTypes.TEXT,
-      gastos: DataTypes.INTEGER
-    }
-  }, {
-    sequelize,
-    modelName: 'Plan',
-  });
-  return Plan;
+    }, {
+        sequelize,
+        modelName: Plan.modelName,
+        tableName: "Planes"
+    });
+    return Plan;
 };

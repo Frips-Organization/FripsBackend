@@ -1,22 +1,29 @@
 'use strict';
 const {
-    Model
+    Model, DataTypes
 } = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-    class GrupoViaje extends Model {
-        /**
-         * Helper method for defining associations.
-         * This method is not a part of Sequelize lifecycle.
-         * The `models/index` file will call this method automatically.
-         */
-        static associate(models) {
-            this.hasMany(models.Usuario, {foreignKey: 'userId'})
+const {Grupo} = require("./grupo");
+const {Usuario} = require("./usuario");
 
-            this.hasMany(models.grupo, {foreignKey: 'grupoId'})
-            // define association here
+class GrupoViaje extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+        this.hasMany(models.Usuario, {foreignKey: 'userId'})
+        this.hasMany(models.Grupo, {foreignKey: 'grupoId'})
+        // define association here
 
-        }
     }
+
+    static modelName = "GrupoViaje";
+}
+
+exports.GrupoViaje = GrupoViaje;
+
+module.exports = (sequelize) => {
 
     GrupoViaje.init({
         grupoViajeId: {
@@ -29,20 +36,21 @@ module.exports = (sequelize, DataTypes) => {
         grupoId: {
             type: DataTypes.INTEGER,
             references: {
-                model: 'Grupos',
+                model: Grupo,
                 id: 'grupoId'
             }
         },
         usuarioId: {
             type: DataTypes.INTEGER,
             references: {
-                model: 'Usuarios',
+                model: Usuario,
                 id: 'userId'
             }
         }
     }, {
         sequelize,
-        modelName: 'GrupoViaje',
+        modelName: GrupoViaje.modelName,
+        timestamps: false
     });
     return GrupoViaje;
 };

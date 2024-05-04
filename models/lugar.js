@@ -1,22 +1,27 @@
 'use strict';
 const {
-    Model
+    Model, DataTypes
 } = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-    class lugar extends Model {
-        /**
-         * Helper method for defining associations.
-         * This method is not a part of Sequelize lifecycle.
-         * The `models/index` file will call this method automatically.
-         */
-        static associate(models) {
-            // define association here
-        }
+
+class Lugar extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+        // define association here
     }
 
-    lugar.init({
+    static modelName = "Lugar";
+}
+
+exports.Lugar = Lugar;
+
+module.exports = (sequelize) => {
+
+    Lugar.init({
         id: {
-            allowNull: true,
             autoIncrement: true,
             primaryKey: true,
             type: DataTypes.INTEGER
@@ -37,7 +42,10 @@ module.exports = (sequelize, DataTypes) => {
         }
     }, {
         sequelize,
-        tableName: 'lugar'
+        tableName: 'Lugares',
+        modelName: Lugar.modelName,
+        timestamps: false
     });
-    return lugar;
+
+    return Lugar;
 };
