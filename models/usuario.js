@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
-            allowNull: true
+            allowNull: true //Esta bien que esto sea null?
         },
         nombre: {
             type: DataTypes.STRING,
