@@ -3,20 +3,21 @@ const {
     Model, DataTypes
 } = require('sequelize');
 
-class Calendario extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-        this.hasMany(models.Plan, {foreignKey: 'id'})
-    }
-    static modelName = 'Calendario';
-}
-
-exports.Calendario = Calendario;
 module.exports = (sequelize) => {
+
+    class Calendario extends Model {
+        /**
+         * Helper method for defining associations.
+         * This method is not a part of Sequelize lifecycle.
+         * The `models/index` file will call this method automatically.
+         */
+        static associate(models) {
+            this.hasMany(models.Plan, {foreignKey: 'id'})
+        }
+
+        static modelName = 'Calendario';
+    }
+
     Calendario.init({
         id: {
             allowNull: false,
