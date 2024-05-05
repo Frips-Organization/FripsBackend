@@ -31,7 +31,10 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: false
         },
-        estado: DataTypes.TEXT
+        estado: {
+            type: DataTypes.TEXT,
+            allowNull: true
+        }
     }, {
         sequelize,
         modelName: Grupo.modelName,

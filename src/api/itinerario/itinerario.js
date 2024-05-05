@@ -6,16 +6,18 @@ const router = express.Router();
 
 //post itinerario
 router.post("/itinerario", async (req,res,next) => {
-    let grupoViajeId = req.body.grupoViajeId;
+    let grupoID = req.body.grupoID;
     let fecha = req.body.fecha;
     let userId = req.body.userId;
-    //let gastoTotal = req.body.gastoTotal; //esta permitido el null
-    //let kmTotal  = req.body.kmTotal;  //esta permitido el null
+    let gastoTotal = req.body.gastoTotal; //esta permitido el null
+    let kmTotal  = req.body.kmTotal;  //esta permitido el null
     try {
         await Itinerario.create({
-            grupoViajeId: grupoViajeId,
+            grupoID: grupoID,
             fecha: fecha,
-            userId: userId 
+            userId: userId,
+            gastoTotal: gastoTotal,
+            kmTotal : kmTotal
         }).then((data) => {
             res.status(201).send("Created");
         }).catch((error) => {

@@ -24,13 +24,14 @@ module.exports = (sequelize) => {
         itinerario_id: {
             autoIncrement: true,
             primaryKey: true,
+            allowNull: false,
             type: DataTypes.INTEGER
         },
-        grupoViajeId: {
+        grupoId: {
             type: DataTypes.INTEGER,
             references: {
-                model: 'GrupoViajes',
-                key: 'grupoViajeId'
+                model: 'Grupo',
+                key: 'grupoId'
             }
         },
         fecha: {

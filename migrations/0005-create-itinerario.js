@@ -9,11 +9,11 @@ module.exports = {
                 primaryKey: true,
                 type: Sequelize.INTEGER
             },
-            grupoViajeId: {
+            grupoId: {
                 type: Sequelize.INTEGER,
                 references: {
-                    model: "GrupoViajes",
-                    key: 'grupoViajeId'
+                    model: "Grupos",
+                    key: 'grupoId'
                 }
             },
             fecha: {
@@ -27,10 +27,12 @@ module.exports = {
                 }
             },
             gastoTotal: {
-                type: Sequelize.FLOAT
+                type: Sequelize.FLOAT,
+                allowNull: true
             },
             kmTotal: {
-                type: Sequelize.INTEGER
+                type: Sequelize.INTEGER,
+                allowNull: true
             }
         });
     },

@@ -7,6 +7,7 @@ const router = express.Router();
 
 //router.get() hay que hacer un get por ID
 
+//Este post sirve para agregar un usuario a un grupo
 router.post("/grupoviaje", async (req,res,next) => {
     let grupoId = req.body.grupoId;
     let usuarioId = req.body.usuarioId;

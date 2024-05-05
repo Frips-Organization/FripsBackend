@@ -87,3 +87,13 @@ psql -U postgres
 - En el cmd, una vez conectado con la base de datos fripsDB, ejecuta el siguiente comando:
 
 \d "nombre_de_la_tabla"
+
+### Ingresar datos de prueba
+
+- Ingresa: un usuario, un grupo, un grupoviaje, un itinerario
+
+INSERT INTO "Usuarios" ("userId","nombre","email","password","createdAt","updatedAt") VALUES (DEFAULT,$1,$2,$3,$4,$5) RETURNING "userId","nombre","email","password","createdAt","updatedAt";
+
+
+
+
