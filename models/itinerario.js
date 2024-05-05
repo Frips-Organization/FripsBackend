@@ -44,8 +44,15 @@ module.exports = (sequelize) => {
                 key: 'userId'
             }
         },
-        gastoTotal: DataTypes.FLOAT,
-        kmTotal: DataTypes.INTEGER
+        //ojo, estoy permitiendo nulls, esto para poder calcular los gastos mas tarde
+        gastoTotal: { 
+            type: DataTypes.FLOAT,
+            allowNull: true
+        },
+        kmTotal: {
+            type: DataTypes.INTEGER,
+            allowNull: true
+        }
     }, {
         sequelize,
         modelName: Itinerario.modelName,
