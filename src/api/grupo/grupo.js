@@ -7,7 +7,7 @@ const router = express.Router();
 //router.get() hay que hacer un get por ID
 
 router.post("/grupo", async (req, res, next) => {
-  const { nombre, usuarioId } = req.body;
+  const { nombre, userId } = req.body;
 
   try {
     const grupo = await Grupo.create({
@@ -19,7 +19,7 @@ router.post("/grupo", async (req, res, next) => {
 
     await GrupoViaje.create({
       grupoId,
-      usuarioId,
+      userId,
     });
 
     res.status(201).send("Created");
