@@ -20,6 +20,7 @@ module.exports = (sequelize) => {
         static modelName = "GrupoViaje";
     }
 
+    //Grupo viaje es la tabla que contiene todos los usuarios y los grupos a los que pertenecen
     GrupoViaje.init({
         grupoViajeId: {
             allowNull: false,

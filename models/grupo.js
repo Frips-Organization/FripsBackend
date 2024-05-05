@@ -19,6 +19,7 @@ module.exports = (sequelize) => {
         static modelName = 'Grupo';
     }
 
+    //Grupo es una tabla que contiene solo los nombres y el estado de cada grupo, pero no sus integrantes
     Grupo.init({
         grupoId: {
             type: DataTypes.INTEGER,
@@ -28,9 +29,7 @@ module.exports = (sequelize) => {
         },
         nombre: {
             type: DataTypes.STRING,
-            validate: {
-                allowNull: false
-            }
+            allowNull: false
         },
         estado: DataTypes.TEXT
     }, {

@@ -25,7 +25,7 @@ router.post("/login", async (req, res,next) => {
         if(user.password===(password)){
 
             const token = jwt.sign({user: user.userId, email: user.email }, secret, {
-                expiresIn: "1440 minutes",
+                expiresIn: "1440 minutes", //1 dia
                 algorithm: "HS256",
                 encoding: "UTF-8",
                 issuer: "localhost:3001"

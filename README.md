@@ -59,7 +59,7 @@ npm run dev
 #### Como entrar al contenedor de Docker?
 - Abre un cmd y ejecuta el siguiente comando:
 
-docker exec -it backendDB /bin/bash
+docker exec -it fripsDB /bin/bash
 
 #### Como entrar a Postgres dentro del contenedor de Docker?
 * Esto tambien se puede ejecutar desde SQLShell(psql) si se instalo PostGres en la compu
