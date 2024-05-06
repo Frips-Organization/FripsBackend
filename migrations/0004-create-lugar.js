@@ -15,9 +15,11 @@ module.exports = {
       },
       descripcion: {
         type: Sequelize.TEXT,
+        allowNull: true,
       },
       ubicacion: {
         type: Sequelize.STRING,
+        allowNull: true
       },
       coordenadas: {
         type: Sequelize.STRING,

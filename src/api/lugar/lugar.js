@@ -26,3 +26,25 @@ router.post("/lugar", async (req, res, next) => {
 //router.delete();
 
 module.exports = router;
+
+
+router.post("/lugar", async (req, res, next) => {
+  let { grupoId, userId } = req.body;
+  try {
+    await GrupoViaje.create({
+      nombre : nombre, //nombre del lugar
+      descripcion : "sin descripcion", //Estos son valores por defecto para un nuevo lugar
+      ubicacion : "sin especificar"
+    })
+      .then((data) => {
+        res.status(201).send("Created");
+      })
+      .catch((error) => {
+        next(error);
+      });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500);
+    res.send(error);
+  }
+});

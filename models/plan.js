@@ -31,14 +31,6 @@ module.exports = (sequelize) => {
           model: "Itinerario",
           key: "itinerarioId",
         },
-
-        lugarId: {
-          type: DataTypes.INTEGER,
-          references: {
-            model: "Lugar",
-            key: "lugarId",
-          },
-        },
         userId: {
           type: DataTypes.INTEGER,
           references: {
@@ -46,11 +38,17 @@ module.exports = (sequelize) => {
             key: "userId",
           },
         },
-        descripcion: DataTypes.TEXT,
-        horaLlegada: DataTypes.DATE,
+        descripcion:{
+          type: DataTypes.TEXT,
+          allowNull: true
+        },
+        horaLlegada: DataTypes.TIME,
         horaSalida: DataTypes.DATE,
         puntoPartida: DataTypes.STRING,
-        motivo: DataTypes.TEXT,
+        motivo: {
+          type: DataTypes.TEXT,
+          allowNull: true
+        },
         gastos: DataTypes.INTEGER,
         createdAt: {
           allowNull: true,

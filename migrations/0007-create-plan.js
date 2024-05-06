@@ -16,13 +16,6 @@ module.exports = {
           key: "itinerarioId",
         },
       },
-      lugarId: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: "Lugares",
-          key: "lugarId",
-        },
-      },
       userId: {
         type: Sequelize.INTEGER,
         references: {
@@ -35,10 +28,10 @@ module.exports = {
         allowNull: false,
       },
       horaLlegada: {
-        type: Sequelize.DATE,
+        type: Sequelize.TIME,
       },
       horaSalida: {
-        type: Sequelize.DATE,
+        type: Sequelize.TIME,
       },
       puntoPartida: {
         type: Sequelize.STRING,

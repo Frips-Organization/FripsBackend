@@ -6,11 +6,12 @@ const router = express.Router();
 
 // Ruta POST para crear un itinerario
 router.post("/itinerario", async (req, res) => {
-  const { grupoId, fecha, userId } = req.body;
+  const { nombre, grupoId, fecha, userId } = req.body;
 
   try {
     // Crea un nuevo itinerario con los datos proporcionados
     const newItinerary = await Itinerario.create({
+      nombre,
       grupoId,
       fecha,
       userId,

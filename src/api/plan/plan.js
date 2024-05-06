@@ -1,14 +1,15 @@
 const express = require("express");
 const db = require("../../../models");
 const { Plan } = require("../../../models");
-
+const {Lugar} = require("../../../models");
 const router = express.Router();
 
 //post plan
 router.post("/plan", async (req, res, next) => {
-  let {
+  const {
+    //FIX: nombre(del lugar) no se deberia mandar desde el request, deberia ser una columna mas de plan
+    nombre, //Este es el nombre del lugar, no del plan
     itinerarioId,
-    lugarId,
     userId,
     descripcion,
     horaLlegada,
@@ -21,27 +22,31 @@ router.post("/plan", async (req, res, next) => {
   //let updatedAt
 
   try {
-    await Plan.create({
-      itinerarioId,
-      lugarId,
-      userId,
-      descripcion,
-      horaLlegada,
-      horaSalida,
-      puntoPartida,
-      motivo,
-      gastos,
+
+     const plan = await Plan.create({
+      itinerarioId : itinerarioId,
+      userId : userId,
+      descripcion : descripcion,
+      horaLlegada : horaLlegada,
+      horaSalida : horaSalida,
+      puntoPartida: puntoPartida,
+      motivo: motivo,
+      gastos: gastos
+     });
+
+    //Aqui hace falta verificar que si el nombre del lugar ya
+    //existe en la tabla "Lugar", entonces se salte la siguiente insercion
+
+    const lugar = await Lugar.create({
+      nombre : nombre, //nombre del lugar
+      //descripcion : "sin descripcion", //Estos son valores por defecto para un nuevo lugar
+      //ubicacion : "sin especificar"
     })
-      .then((data) => {
-        res.status(201).send("Created");
-      })
-      .catch((error) => {
-        next(error);
-      });
+
+    res.status(201).send("Created");
   } catch (error) {
-    console.log(error.message);
-    res.status(500);
-    res.send(error);
+    console.error(error);
+    res.status(500).send("Internal Server Error");
   }
 });
 
