@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "postgres",
-    "password": "1234",
-    "database": "fripsDB",
-    "host": "127.0.0.1",
+    "username": "fripsdb",
+    "password": "Ab8BUYl62fUMGYdnmQti4uTX1vghyTOr",
+    "database": "fripsdb",
+    "host": "dpg-cp3eoafsc6pc73fng470-a",
     "dialect": "postgres"
   },
   "test": {
