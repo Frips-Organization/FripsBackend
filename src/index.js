@@ -2,9 +2,9 @@ const db = require("../models/index.js");
 //const usuario = require("../models/usuario.js")
 const app = require("./app.js");
 const Sequelize = require("sequelize")
-// app.get('/', (req, res) => {
-//   res.send('Hola Mundo');
-// });
+app.get('/', (req, res) => {
+  res.send('Hola Mundo');
+});
 
 
 async function main() {
