@@ -23,9 +23,12 @@ module.exports = {
           key: "userId",
         },
       },
+      nombreLugar: {
+        type: Sequelize.TEXT,
+      },
       descripcion: {
         type: Sequelize.TEXT,
-        allowNull: false,
+        allowNull: false
       },
       horaLlegada: {
         type: Sequelize.TIME,
@@ -38,9 +41,7 @@ module.exports = {
       },
       motivo: {
         type: Sequelize.TEXT,
-      },
-      gastos: {
-        type: Sequelize.INTEGER,
+        allowNull: false
       },
       createdAt: {
         required: false,

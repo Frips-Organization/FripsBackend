@@ -5,8 +5,6 @@ const { GrupoViaje } = require("../../../models");
 const { Usuario } = require("../../../models");
 const router = express.Router();
 
-//router.get() hay que hacer un get por ID
-
 router.post("/grupo", async (req, res, next) => {
   const { nombre, userEmails } = req.body;
 
@@ -54,6 +52,8 @@ router.get("/grupo/:grupoId", async (req, res, next) => {
       where: { grupoId },
       include: [
         {
+          // NOTA: No esta devolviendo solo el id de los usuarios que pertencen al grupo
+          // esta devolviendo el modelo entero de todos los grupo viaje que contengan el id del grupo que esta buscando
           model: GrupoViaje,
         },
       ],
@@ -63,7 +63,11 @@ router.get("/grupo/:grupoId", async (req, res, next) => {
       return res.status(404).send("Grupo no encontrado");
     }
 
-    res.json(grupo);
+    //NOTA: Aqui estoy haciendo una lista con solo los id de los usuarios que pertenecen a este grupo
+    const usersIds = grupo.GrupoViajes.map(grupoViaje => grupoViaje.userId);
+  
+
+    res.json({grupo,usersIds});
   } catch (error) {
     console.error(error);
     res.status(500).send("Error interno del servidor");

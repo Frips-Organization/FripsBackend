@@ -7,8 +7,7 @@ const router = express.Router();
 //post plan
 router.post("/plan", async (req, res, next) => {
   const {
-    //FIX: nombre(del lugar) no se deberia mandar desde el request, deberia ser una columna mas de plan
-    nombre, //Este es el nombre del lugar, no del plan
+    nombrelugar,
     itinerarioId,
     userId,
     descripcion,
@@ -16,7 +15,6 @@ router.post("/plan", async (req, res, next) => {
     horaSalida,
     puntoPartida,
     motivo,
-    gastos,
   } = req.body;
   //let createdAt pueden ser null y definirse despues
   //let updatedAt
@@ -26,21 +24,21 @@ router.post("/plan", async (req, res, next) => {
      const plan = await Plan.create({
       itinerarioId : itinerarioId,
       userId : userId,
+      nombrelugar: nombrelugar,
       descripcion : descripcion,
       horaLlegada : horaLlegada,
       horaSalida : horaSalida,
       puntoPartida: puntoPartida,
-      motivo: motivo,
-      gastos: gastos
+      motivo: motivo
      });
 
     //Aqui hace falta verificar que si el nombre del lugar ya
     //existe en la tabla "Lugar", entonces se salte la siguiente insercion
 
     const lugar = await Lugar.create({
-      nombre : nombre, //nombre del lugar
-      //descripcion : "sin descripcion", //Estos son valores por defecto para un nuevo lugar
-      //ubicacion : "sin especificar"
+      nombre : nombrelugar,
+      descripcion : "sin descripcion", //Estos son valores por defecto para un nuevo lugar
+      ubicacion : "sin especificar"
     })
 
     res.status(201).send("Created");

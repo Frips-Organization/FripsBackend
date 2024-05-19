@@ -10,9 +10,10 @@ module.exports = (sequelize) => {
      */
     static associate(models) {
       // define association here
-      this.hasOne(models.Usuario, { foreignKey: "userId" });
-      this.hasOne(models.Itinerario, { foreignKey: "itinerarioId" });
-      this.hasOne(models.Lugar, { foreignKey: "lugarId" });
+      //NOTA: creo que realmente plan no necesita  tener un userId
+      this.belongsTo(models.Usuario, { foreignKey: "userId" });
+      this.belongsTo(models.Itinerario, { foreignKey: "itinerarioId" });
+      this.belongsTo(models.Calendario, { foreignKey: "planId", allowNull: true });
     }
 
     static modelName = "Plan";
@@ -38,9 +39,12 @@ module.exports = (sequelize) => {
             key: "userId",
           },
         },
+        nombreLugar: {
+          type: DataTypes.TEXT
+        },
         descripcion:{
           type: DataTypes.TEXT,
-          allowNull: true
+          allowNull: false
         },
         horaLlegada: DataTypes.TIME,
         horaSalida: DataTypes.DATE,
@@ -49,7 +53,6 @@ module.exports = (sequelize) => {
           type: DataTypes.TEXT,
           allowNull: true
         },
-        gastos: DataTypes.INTEGER,
         createdAt: {
           allowNull: true,
           type: DataTypes.DATE,

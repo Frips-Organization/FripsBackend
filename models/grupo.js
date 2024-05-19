@@ -13,6 +13,7 @@ module.exports = (sequelize) => {
          */
         static associate(models) {
             this.hasMany(models.GrupoViaje, {foreignKey: "grupoId"});
+            this.hasMany(models.Itinerario, {foreignKey: "grupoId"});
         }
 
         static modelName = 'Grupo';

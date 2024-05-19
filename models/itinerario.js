@@ -10,8 +10,11 @@ module.exports = (sequelize) => {
      */
     static associate(models) {
       // define association here
-      this.hasMany(models.Usuario, { foreignKey: "userId" });
-      this.hasMany(models.GrupoViaje, { foreignKey: "grupoViajeId" });
+      //this.hasMany(models.Usuario, { foreignKey: "userId" });
+      //this.hasMany(models.GrupoViaje, { foreignKey: "grupoViajeId" });
+      this.belongsTo(models.Grupo, {foreignKey: "grupoId"});
+      this.belongsTo(models.Usuario, {foreignKey: "userId"});
+      this.hasMany(models.Plan, {foreignKey: "itinerarioId"});
     }
 
     static modelName = "Itinerario";
