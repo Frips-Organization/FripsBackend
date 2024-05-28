@@ -27,8 +27,6 @@ router.post("/itinerario", async (req, res) => {
   }
 });
 
-module.exports = router;
-
 // Busca los itinerarios que pertenecen a un grupo, por el ID del grupo
 router.get("/itinerario/:grupoId", async (req, res, next) => {
   const {grupoId} = req.params;
@@ -56,3 +54,7 @@ router.get("/itinerario/:grupoId", async (req, res, next) => {
   }
 
 });
+
+
+
+module.exports = router;

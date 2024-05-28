@@ -9,8 +9,7 @@ module.exports = (sequelize) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
-      //NOTA: creo que realmente plan no necesita  tener un userId
+      // Define associations here
       this.belongsTo(models.Usuario, { foreignKey: "userId" });
       this.belongsTo(models.Itinerario, { foreignKey: "itinerarioId" });
       this.belongsTo(models.Calendario, { foreignKey: "planId", allowNull: true });
@@ -29,47 +28,59 @@ module.exports = (sequelize) => {
       itinerarioId: {
         type: DataTypes.INTEGER,
         references: {
-          model: "Itinerario",
+          model: "Itinerarios", // Nombre correcto de la tabla
           key: "itinerarioId",
         },
-        userId: {
-          type: DataTypes.INTEGER,
-          references: {
-            model: "Usuario",
-            key: "userId",
-          },
+      },
+      userId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: "Usuarios", // Nombre correcto de la tabla
+          key: "userId",
         },
-        nombreLugar: {
-          type: DataTypes.TEXT
-        },
-        descripcion:{
-          type: DataTypes.TEXT,
-          allowNull: false
-        },
-        horaLlegada: DataTypes.TIME,
-        horaSalida: DataTypes.DATE,
-        puntoPartida: DataTypes.STRING,
-        motivo: {
-          type: DataTypes.TEXT,
-          allowNull: true
-        },
-        createdAt: {
-          allowNull: true,
-          type: DataTypes.DATE,
-          defaultValue: DataTypes.NOW,
-        },
-        updatedAt: {
-          allowNull: true,
-          type: DataTypes.DATE,
-          defaultValue: DataTypes.NOW,
-        },
+      },
+      nombreLugar: {
+        type: DataTypes.STRING,
+        allowNull: false, // Dependiendo de los requerimientos
+      },
+      descripcion: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      horaLlegada: {
+        type: DataTypes.TIME,
+        allowNull: true,
+      },
+      horaSalida: {
+        type: DataTypes.TIME,
+        allowNull: true,
+      },
+      puntoPartida: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      motivo: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      createdAt: {
+        allowNull: true,
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+      },
+      updatedAt: {
+        allowNull: true,
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
       },
     },
     {
       sequelize,
       modelName: Plan.modelName,
       tableName: "Planes",
+      timestamps: true, // Para habilitar createdAt y updatedAt
     }
   );
+  
   return Plan;
 };

@@ -24,11 +24,11 @@ module.exports = {
         },
       },
       nombreLugar: {
-        type: Sequelize.TEXT,
+        type: Sequelize.STRING,
       },
       descripcion: {
-        type: Sequelize.TEXT,
-        allowNull: false
+        allowNull: false,
+        type: Sequelize.STRING,
       },
       horaLlegada: {
         type: Sequelize.TIME,
@@ -40,8 +40,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       motivo: {
-        type: Sequelize.TEXT,
-        allowNull: false
+        type: Sequelize.STRING,
       },
       createdAt: {
         required: false,
