@@ -31,10 +31,9 @@ module.exports = router;
 
 // Busca los itinerarios que pertenecen a un grupo, por el ID del grupo
 router.get("/itinerario/:grupoId", async (req, res, next) => {
-  const {grupoId} = req.params;
+  const { grupoId } = req.params;
 
-  try{
-
+  try {
     const itinerarios = await Grupo.findOne({
       where: { grupoId },
       include: [
@@ -44,15 +43,31 @@ router.get("/itinerario/:grupoId", async (req, res, next) => {
       ],
     });
 
-    if(!itinerarios){
+    if (!itinerarios) {
       return res.status(404).send("Itinerario no econtrado");
     }
 
-    res.json({itinerarios})
-
-  }catch (error) {
+    res.json({ itinerarios });
+  } catch (error) {
     console.error(error);
     res.status(500).send("Error interno del servidor");
   }
+});
 
+router.delete("/itinerario/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const itinerario = await Itinerario.findByPk(id);
+
+    if (!itinerario) {
+      return res.status(404).send("Itinerario no encontrado");
+    }
+
+    await itinerario.destroy();
+    res.status(200).send("Itinerario eliminado correctamente");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error interno del servidor");
+  }
 });
