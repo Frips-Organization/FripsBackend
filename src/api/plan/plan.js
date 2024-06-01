@@ -2,6 +2,7 @@ const express = require("express");
 const db = require("../../../models");
 const { Plan } = require("../../../models");
 const {Lugar} = require("../../../models");
+const { Itinerario } = require("../../../models");
 const router = express.Router();
 
 //post plan
@@ -46,6 +47,34 @@ router.post("/plan", async (req, res, next) => {
     console.error(error);
     res.status(500).send("Internal Server Error");
   }
+});
+
+
+router.get("/plan/:itinerarioId", async(req,res,next) => {
+const {itinerarioId} = req.params;
+
+try {
+
+  const planes = await Itinerario.finOne({
+    where : { itinerarioId },
+    include: [
+      {
+        model: Plan,
+      },
+    ],
+  });
+
+  if(!planes) {
+    return res.status(404).send("Plane no econtrado");
+  }
+
+  res.json({ planes });
+  
+}catch (error) {
+  console.error(error);
+  res.status(500).send("Error interno del servidor");
+}
+
 });
 
 module.exports = router;
