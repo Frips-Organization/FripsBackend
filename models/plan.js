@@ -3,17 +3,14 @@ const { Model, DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
   class Plan extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
-      //NOTA: creo que realmente plan no necesita  tener un userId
+      // Definir las asociaciones aquí
       this.belongsTo(models.Usuario, { foreignKey: "userId" });
       this.belongsTo(models.Itinerario, { foreignKey: "itinerarioId" });
-      this.belongsTo(models.Calendario, { foreignKey: "planId", allowNull: true });
+      this.belongsTo(models.Calendario, {
+        foreignKey: "planId",
+        allowNull: true,
+      });
     }
 
     static modelName = "Plan";
@@ -29,40 +26,45 @@ module.exports = (sequelize) => {
       itinerarioId: {
         type: DataTypes.INTEGER,
         references: {
-          model: "Itinerario",
+          model: "Itinerarios",
           key: "itinerarioId",
         },
-        userId: {
-          type: DataTypes.INTEGER,
-          references: {
-            model: "Usuario",
-            key: "userId",
-          },
+      },
+      userId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: "Usuarios",
+          key: "userId",
         },
-        nombreLugar: {
-          type: DataTypes.TEXT
-        },
-        descripcion:{
-          type: DataTypes.TEXT,
-          allowNull: false
-        },
-        horaLlegada: DataTypes.TIME,
-        horaSalida: DataTypes.DATE,
-        puntoPartida: DataTypes.STRING,
-        motivo: {
-          type: DataTypes.TEXT,
-          allowNull: true
-        },
-        createdAt: {
-          allowNull: true,
-          type: DataTypes.DATE,
-          defaultValue: DataTypes.NOW,
-        },
-        updatedAt: {
-          allowNull: true,
-          type: DataTypes.DATE,
-          defaultValue: DataTypes.NOW,
-        },
+      },
+      nombreLugar: {
+        type: DataTypes.TEXT,
+      },
+      descripcion: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      horaLlegada: {
+        type: DataTypes.TIME,
+      },
+      horaSalida: {
+        type: DataTypes.TIME, // Cambiado a TIME para coincidir con la migración
+      },
+      puntoPartida: {
+        type: DataTypes.STRING,
+      },
+      motivo: {
+        type: DataTypes.TEXT,
+      },
+      createdAt: {
+        allowNull: true,
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+      },
+      updatedAt: {
+        allowNull: true,
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
       },
     },
     {
@@ -71,5 +73,6 @@ module.exports = (sequelize) => {
       tableName: "Planes",
     }
   );
+
   return Plan;
 };

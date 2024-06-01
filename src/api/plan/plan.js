@@ -8,7 +8,7 @@ const router = express.Router();
 //post plan
 router.post("/plan", async (req, res, next) => {
   const {
-    nombrelugar,
+    nombreLugar,
     itinerarioId,
     userId,
     descripcion,
@@ -24,7 +24,7 @@ router.post("/plan", async (req, res, next) => {
     const plan = await Plan.create({
       itinerarioId: itinerarioId,
       userId: userId,
-      nombrelugar: nombrelugar,
+      nombreLugar: nombreLugar,
       descripcion: descripcion,
       horaLlegada: horaLlegada,
       horaSalida: horaSalida,
@@ -36,7 +36,7 @@ router.post("/plan", async (req, res, next) => {
     //existe en la tabla "Lugar", entonces se salte la siguiente insercion
 
     const lugar = await Lugar.create({
-      nombre: nombrelugar,
+      nombre: nombreLugar,
       descripcion: "sin descripcion", //Estos son valores por defecto para un nuevo lugar
       ubicacion: "sin especificar",
     });

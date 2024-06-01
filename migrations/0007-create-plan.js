@@ -28,7 +28,7 @@ module.exports = {
       },
       descripcion: {
         type: Sequelize.TEXT,
-        allowNull: false
+        allowNull: false,
       },
       horaLlegada: {
         type: Sequelize.TIME,
@@ -41,7 +41,6 @@ module.exports = {
       },
       motivo: {
         type: Sequelize.TEXT,
-        allowNull: false
       },
       createdAt: {
         required: false,
