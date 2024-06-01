@@ -16,6 +16,10 @@ cloudinary.config({
 router.post("/grupo", async (req, res, next) => {
   const { nombre, userEmails } = req.body;
 
+// CLOUDINARY_CLOUD_NAME=dgdxmyucz
+// CLOUDINARY_API_KEY=885849665889138
+// CLOUDINARY_API_SECRET=j9lpgEePGw2w3yLt_Jnf-QatPuI
+
   try {
     const grupo = await Grupo.create({
       nombre: nombre,
