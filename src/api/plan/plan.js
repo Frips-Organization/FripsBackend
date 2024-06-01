@@ -65,11 +65,11 @@ try {
   });
 
   if(!planes) {
-    return res.status(404).send("Plane no econtrado");
+    return res.status(404).send("Plano no econtrado");
   }
 
   res.json({ planes });
-  
+
 }catch (error) {
   console.error(error);
   res.status(500).send("Error interno del servidor");

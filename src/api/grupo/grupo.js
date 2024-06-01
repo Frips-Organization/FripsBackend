@@ -3,7 +3,15 @@ const db = require("../../../models");
 const { Grupo } = require("../../../models");
 const { GrupoViaje } = require("../../../models");
 const { Usuario } = require("../../../models");
+
+
 const router = express.Router();
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 router.post("/grupo", async (req, res, next) => {
   const { nombre, userEmails } = req.body;
@@ -35,6 +43,9 @@ router.post("/grupo", async (req, res, next) => {
         });
       }
     }
+
+    //Crea una carpeta en cloudinary con el Id del grupo
+    await cloudinary.api.create_folder(grupoId);
 
     res.status(200).send(grupo);
   } catch (error) {
