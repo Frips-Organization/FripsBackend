@@ -3,7 +3,16 @@ const db = require("../../../models");
 const { Grupo } = require("../../../models");
 const { GrupoViaje } = require("../../../models");
 const { Usuario } = require("../../../models");
+const cloudinary = require("cloudinary").v2; // Asegúrate de tener esta línea
+require("dotenv").config();
 const router = express.Router();
+
+// Configura Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 router.post("/grupo", async (req, res, next) => {
   const { nombre, userEmails } = req.body;
@@ -36,6 +45,9 @@ router.post("/grupo", async (req, res, next) => {
       }
     }
 
+    // Crea una carpeta en cloudinary con el Id del grupo
+    await cloudinary.api.create_folder(grupoId.toString());
+
     res.status(200).send(grupo);
   } catch (error) {
     console.error(error);
@@ -52,8 +64,8 @@ router.get("/grupo/:grupoId", async (req, res, next) => {
       where: { grupoId },
       include: [
         {
-          // NOTA: No esta devolviendo solo el id de los usuarios que pertencen al grupo
-          // esta devolviendo el modelo entero de todos los grupo viaje que contengan el id del grupo que esta buscando
+          // NOTA: No está devolviendo solo el id de los usuarios que pertenecen al grupo
+          // está devolviendo el modelo entero de todos los grupo viaje que contengan el id del grupo que está buscando
           model: GrupoViaje,
         },
       ],
@@ -63,7 +75,7 @@ router.get("/grupo/:grupoId", async (req, res, next) => {
       return res.status(404).send("Grupo no encontrado");
     }
 
-    //NOTA: Aqui estoy haciendo una lista con solo los id de los usuarios que pertenecen a este grupo
+    // NOTA: Aquí estoy haciendo una lista con solo los id de los usuarios que pertenecen a este grupo
     const usersIds = grupo.GrupoViajes.map((grupoViaje) => grupoViaje.userId);
 
     res.json({ grupo, usersIds });
@@ -117,7 +129,7 @@ router.delete("/grupo/:grupoId", async (req, res, next) => {
     if (rowsDeleted === 0) {
       return res.status(404).send("Grupo no encontrado");
     }
-
+    await cloudinary.api.delete_folder(grupoId.toString());
     res.status(200).send(`Grupo con ID ${grupoId} eliminado correctamente`);
   } catch (error) {
     console.error(error);

@@ -27,8 +27,8 @@ module.exports = {
         type: Sequelize.STRING,
       },
       descripcion: {
+        type: Sequelize.TEXT,
         allowNull: false,
-        type: Sequelize.STRING,
       },
       horaLlegada: {
         type: Sequelize.TIME,
@@ -40,7 +40,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       motivo: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
       },
       createdAt: {
         required: false,

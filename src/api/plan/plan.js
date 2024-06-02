@@ -1,16 +1,17 @@
 const express = require("express");
 const db = require("../../../models");
 const { Plan } = require("../../../models");
-const {Lugar} = require("../../../models");
+const { Lugar } = require("../../../models");
+const { Itinerario } = require("../../../models");
 const router = express.Router();
 
 //post plan
 router.post("/plan", async (req, res) => {
   console.log("-------------REQUEST> ", req.body);
   const {
+    nombreLugar,
     itinerarioId,
     userId,
-    nombreLugar,
     descripcion,
     horaLlegada,
     horaSalida,
@@ -21,27 +22,120 @@ router.post("/plan", async (req, res) => {
   //let updatedAt
 
   try {
-     const plan = await Plan.create({
-      itinerarioId,
-      userId,
-      nombreLugar,
-      descripcion,
-      horaLlegada,
-      horaSalida,
-      puntoPartida,
-      motivo
-     });
+    const plan = await Plan.create({
+      itinerarioId: itinerarioId,
+      userId: userId,
+      nombreLugar: nombreLugar,
+      descripcion: descripcion,
+      horaLlegada: horaLlegada,
+      horaSalida: horaSalida,
+      puntoPartida: puntoPartida,
+      motivo: motivo,
+    });
 
     //Aqui hace falta verificar que si el nombre del lugar ya
     //existe en la tabla "Lugar", entonces se salte la siguiente insercion
 
     const lugar = await Lugar.create({
-      nombre : nombreLugar,
-      descripcion : "sin descripcion", //Estos son valores por defecto para un nuevo lugar
-      ubicacion : "sin especificar"
-    })
+      nombre: nombreLugar,
+      descripcion: "sin descripcion", //Estos son valores por defecto para un nuevo lugar
+      ubicacion: "sin especificar",
+    });
 
-    res.status(201).send(plan);
+    res.status(201).send("Created");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+router.get("/plan/:itinerarioId", async (req, res, next) => {
+  const { itinerarioId } = req.params;
+
+  try {
+    const planes = await Itinerario.findOne({
+      where: { itinerarioId },
+      include: [
+        {
+          model: Plan,
+        },
+      ],
+    });
+
+    if (!planes) {
+      return res.status(404).send("Plane no econtrado");
+    }
+
+    res.json({ planes });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error interno del servidor");
+  }
+});
+
+router.get("/grupo/:grupoId/planes", async (req, res, next) => {
+  const { grupoId } = req.params;
+
+  try {
+    // Encuentra todos los itinerarios asociados al grupo
+    const itinerarios = await Itinerario.findAll({
+      where: { grupoId },
+      include: [
+        {
+          model: Plan,
+        },
+      ],
+    });
+
+    // Array para almacenar todos los planes de todos los itinerarios con fecha del itinerario
+    const planesConFecha = [];
+
+    // Itera sobre cada itinerario y agrega sus planes con fecha del itinerario al array planesConFecha
+    itinerarios.forEach((itinerario) => {
+      itinerario.Plans.forEach((plan) => {
+        // Incluye la fecha del itinerario junto con el plan
+        const planConFecha = {
+          ...plan.toJSON(),
+          fechaItinerario: itinerario.fecha,
+        };
+        planesConFecha.push(planConFecha);
+      });
+    });
+
+    res.json({ planes: planesConFecha });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error interno del servidor");
+  }
+});
+
+router.delete("/plan/:planId", async (req, res, next) => {
+  const { planId } = req.params;
+
+  try {
+    // Busca el plan por su ID
+    const plan = await Plan.findByPk(planId);
+
+    // Si el plan no existe, devuelve un error 404
+    if (!plan) {
+      return res.status(404).send("Plan not found");
+    }
+
+    // Eliminar primero el lugar asociado al plan
+    await Lugar.destroy({ where: { nombre: plan.nombreLugar } });
+
+    // Luego elimina la relación del plan con el itinerario
+    plan.itinerarioId = null;
+    await plan.save();
+
+    // Finalmente, elimina el plan
+    await plan.destroy();
+
+    res
+      .status(200)
+      .send(
+        `Plan with ID ${planId} and its associated place deleted successfully`
+      );
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");

@@ -3,16 +3,14 @@ const { Model, DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
   class Plan extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // Define associations here
+      // Definir las asociaciones aquí
       this.belongsTo(models.Usuario, { foreignKey: "userId" });
       this.belongsTo(models.Itinerario, { foreignKey: "itinerarioId" });
-      this.belongsTo(models.Calendario, { foreignKey: "planId", allowNull: true });
+      this.belongsTo(models.Calendario, {
+        foreignKey: "planId",
+        allowNull: true,
+      });
     }
 
     static modelName = "Plan";
@@ -28,40 +26,35 @@ module.exports = (sequelize) => {
       itinerarioId: {
         type: DataTypes.INTEGER,
         references: {
-          model: "Itinerarios", // Nombre correcto de la tabla
+          model: "Itinerarios",
           key: "itinerarioId",
         },
       },
       userId: {
         type: DataTypes.INTEGER,
         references: {
-          model: "Usuarios", // Nombre correcto de la tabla
+          model: "Usuarios",
           key: "userId",
         },
       },
       nombreLugar: {
-        type: DataTypes.STRING,
-        allowNull: false, // Dependiendo de los requerimientos
+        type: DataTypes.TEXT,
       },
       descripcion: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
       },
       horaLlegada: {
         type: DataTypes.TIME,
-        allowNull: true,
       },
       horaSalida: {
-        type: DataTypes.TIME,
-        allowNull: true,
+        type: DataTypes.TIME, // Cambiado a TIME para coincidir con la migración
       },
       puntoPartida: {
         type: DataTypes.STRING,
-        allowNull: true,
       },
       motivo: {
-        type: DataTypes.STRING,
-        allowNull: true,
+        type: DataTypes.TEXT,
       },
       createdAt: {
         allowNull: true,
@@ -81,6 +74,6 @@ module.exports = (sequelize) => {
       timestamps: true, // Para habilitar createdAt y updatedAt
     }
   );
-  
+
   return Plan;
 };
