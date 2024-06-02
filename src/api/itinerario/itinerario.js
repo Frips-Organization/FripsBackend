@@ -3,6 +3,7 @@ const db = require("../../../models");
 const { Itinerario } = require("../../../models");
 const { Grupo } = require("../../../models");
 const { Plan } = require("../../../models");
+const { Lugar } = require("../../../models");
 const { where } = require("sequelize");
 
 const router = express.Router();
@@ -65,13 +66,20 @@ router.delete("/itinerario/:itinerarioId", async (req, res) => {
 
     //Planes del itinerario
     const planes = await Plan.findAll({
-      where: {itinerarioId}
+      where: { itinerarioId },
     });
 
     // Si hay planes asociados al itinerario, entonces...
-    if(planes){
+    if (planes) {
       //Elimino todos los planes del itinerario
-      for (const plan of planes){
+      for (const plan of planes) {
+        const planId = plan.planId;
+        //Lugares del itinerario
+        const lugar = await Lugar.findOne({
+          where: { planId },
+        });
+
+        await lugar.destroy();
         await plan.destroy();
       }
     }

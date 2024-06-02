@@ -3,11 +3,11 @@ const db = require("../../../models");
 const { Plan } = require("../../../models");
 const { Lugar } = require("../../../models");
 const { Itinerario } = require("../../../models");
+const { Gasto } = require("../../../models");
 const router = express.Router();
 
 //post plan
 router.post("/plan", async (req, res) => {
-  console.log("-------------REQUEST> ", req.body);
   const {
     nombreLugar,
     itinerarioId,
@@ -32,7 +32,7 @@ router.post("/plan", async (req, res) => {
       puntoPartida: puntoPartida,
       motivo: motivo,
     });
-
+    console.log("-------------REQUEST> ", plan.planId);
     //Aqui hace falta verificar que si el nombre del lugar ya
     //existe en la tabla "Lugar", entonces se salte la siguiente insercion
 
@@ -59,6 +59,11 @@ router.get("/plan/:itinerarioId", async (req, res, next) => {
       include: [
         {
           model: Plan,
+          include: [
+            {
+              model: Gasto,
+            },
+          ],
         },
       ],
     });
@@ -124,6 +129,8 @@ router.delete("/plan/:planId", async (req, res, next) => {
 
     // Eliminar primero el lugar asociado al plan
     await Lugar.destroy({ where: { nombre: plan.nombreLugar } });
+    // Eliminar primero el gasto asociado al plan
+    await Gasto.destroy({ where: { planId: plan.planId } });
 
     // Luego elimina la relación del plan con el itinerario
     plan.itinerarioId = null;
