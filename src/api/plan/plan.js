@@ -6,7 +6,8 @@ const { Itinerario } = require("../../../models");
 const router = express.Router();
 
 //post plan
-router.post("/plan", async (req, res, next) => {
+router.post("/plan", async (req, res) => {
+  console.log("-------------REQUEST> ", req.body);
   const {
     nombreLugar,
     itinerarioId,
@@ -37,6 +38,7 @@ router.post("/plan", async (req, res, next) => {
 
     const lugar = await Lugar.create({
       nombre: nombreLugar,
+      planId: plan.planId,
       descripcion: "sin descripcion", //Estos son valores por defecto para un nuevo lugar
       ubicacion: "sin especificar",
     });

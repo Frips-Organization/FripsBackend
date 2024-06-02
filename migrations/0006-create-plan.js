@@ -24,7 +24,7 @@ module.exports = {
         },
       },
       nombreLugar: {
-        type: Sequelize.TEXT,
+        type: Sequelize.STRING,
       },
       descripcion: {
         type: Sequelize.TEXT,

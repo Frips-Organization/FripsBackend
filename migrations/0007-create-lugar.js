@@ -9,6 +9,13 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
+      planId:{
+        type: Sequelize.INTEGER,
+        references:{
+          model: "Planes",
+          key: "planId",
+        }
+      },
       nombre: {
         type: Sequelize.STRING,
         allowNull: false,
