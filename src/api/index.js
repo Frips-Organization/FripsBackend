@@ -4,6 +4,7 @@ const itinerario = require("./itinerario/itinerario");
 const plan = require("./plan/plan");
 const grupo = require("./grupo/grupo");
 const grupoviaje = require("./grupoviaje/grupoviaje");
+const cloud = require("./cloud/cloud");
 const express = require("express");
 
 const apiRouter = express.Router();
@@ -15,5 +16,6 @@ apiRouter.use(itinerario);
 apiRouter.use(plan);
 apiRouter.use(grupo);
 apiRouter.use(grupoviaje);
+apiRouter.use(cloud);
 
 module.exports = apiRouter;
