@@ -2,6 +2,7 @@ const express = require("express");
 const db = require("../../../models");
 const { Itinerario } = require("../../../models");
 const { Grupo } = require("../../../models");
+const { Plan } = require("../../../models");
 const { where } = require("sequelize");
 
 const router = express.Router();
@@ -52,20 +53,37 @@ router.get("/itinerario/:grupoId", async (req, res, next) => {
   }
 });
 
-router.delete("/itinerario/:id", async (req, res) => {
-  const { id } = req.params;
+router.delete("/itinerario/:itinerarioId", async (req, res) => {
+  const { itinerarioId } = req.params;
 
   try {
-    const itinerario = await Itinerario.findByPk(id);
-
+    //Encuentra el itinerario a eliminar
+    const itinerario = await Itinerario.findByPk(itinerarioId);
     if (!itinerario) {
       return res.status(404).send("Itinerario no encontrado");
     }
 
+    //Planes del itinerario
+    const planes = await Plan.findAll({
+      where: {itinerarioId}
+    });
+
+    // Si hay planes asociados al itinerario, entonces...
+    if(planes){
+      //Elimino todos los planes del itinerario
+      for (const plan of planes){
+        await plan.destroy();
+      }
+    }
+
+    //Elimina el itinerario
     await itinerario.destroy();
+
     res.status(200).send("Itinerario eliminado correctamente");
   } catch (error) {
     console.error(error);
     res.status(500).send("Error interno del servidor");
   }
 });
+
+module.exports = router;

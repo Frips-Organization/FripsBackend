@@ -38,6 +38,7 @@ router.post("/plan", async (req, res) => {
 
     const lugar = await Lugar.create({
       nombre: nombreLugar,
+      planId: plan.planId,
       descripcion: "sin descripcion", //Estos son valores por defecto para un nuevo lugar
       ubicacion: "sin especificar",
     });

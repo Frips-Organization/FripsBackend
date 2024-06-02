@@ -9,7 +9,7 @@ module.exports = (sequelize) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      this.belongsTo(models.Plan, {foreignKey: "planId"});
     }
 
     static modelName = "Lugar";
@@ -21,6 +21,13 @@ module.exports = (sequelize) => {
         autoIncrement: true,
         primaryKey: true,
         type: DataTypes.INTEGER,
+      },
+      planId: {
+        type: DataTypes.INTEGER,
+        references: {
+          models: "Planes",
+          key: "planId",
+        },
       },
       nombre: {
         type: DataTypes.STRING,

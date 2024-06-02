@@ -3,6 +3,10 @@ const db = require("../../../models");
 const { Grupo } = require("../../../models");
 const { GrupoViaje } = require("../../../models");
 const { Usuario } = require("../../../models");
+const { Itinerario } = require("../../../models");
+const { Plan } = require("../../../models");
+
+
 const cloudinary = require("cloudinary").v2; // Asegúrate de tener esta línea
 require("dotenv").config();
 const router = express.Router();
@@ -114,9 +118,28 @@ router.get("/grupos", async (req, res, next) => {
 
 router.delete("/grupo/:grupoId", async (req, res, next) => {
   const { grupoId } = req.params;
-
   try {
-    // Eliminar primero los registros en GrupoViaje relacionados con el grupo
+
+    //Busca todos los itinerarios asociados al grupo
+    const itinerarios = await Itinerario.findAll({
+      where: {grupoId}
+    });
+
+    // Si hay itinerarios asociados al grupo, entonces...
+    if (itinerarios){ 
+      //Paso por cada itinerario y elimino los planes asociados
+      for (const itinerario of itinerarios) {
+        await Plan.destroy({
+        where: { itinerarioId: itinerario.itinerarioId }
+      });
+    }
+    //Elimina los itinerarios asociados al grupo
+    await Itinerario.destroy({
+      where: { grupoId }
+    });
+    }
+
+    // Eliminar los registros en GrupoViaje asociados con el grupo
     await GrupoViaje.destroy({
       where: { grupoId },
     });
@@ -129,7 +152,10 @@ router.delete("/grupo/:grupoId", async (req, res, next) => {
     if (rowsDeleted === 0) {
       return res.status(404).send("Grupo no encontrado");
     }
+
+    // Eliminar la carpeta en Cloudinary
     await cloudinary.api.delete_folder(grupoId.toString());
+
     res.status(200).send(`Grupo con ID ${grupoId} eliminado correctamente`);
   } catch (error) {
     console.error(error);

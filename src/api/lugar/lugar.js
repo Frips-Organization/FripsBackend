@@ -25,16 +25,16 @@ router.post("/lugar", async (req, res, next) => {
 //router.put();
 //router.delete();
 
-module.exports = router;
+
 
 
 router.post("/lugar", async (req, res, next) => {
-  let { grupoId, userId } = req.body;
+  let { nombre, descripcion, ubicacion } = req.body;
   try {
-    await GrupoViaje.create({
+    await Lugar.create({
       nombre : nombre, //nombre del lugar
-      descripcion : "sin descripcion", //Estos son valores por defecto para un nuevo lugar
-      ubicacion : "sin especificar"
+      descripcion : descripcion, //Estos son valores por defecto para un nuevo lugar
+      ubicacion : ubicacion
     })
       .then((data) => {
         res.status(201).send("Created");
@@ -48,3 +48,7 @@ router.post("/lugar", async (req, res, next) => {
     res.send(error);
   }
 });
+
+
+
+module.exports = router;
