@@ -6,6 +6,7 @@ const { Usuario } = require("../../../models");
 const { Itinerario } = require("../../../models");
 const { Plan } = require("../../../models");
 const { Lugar } = require("../../../models");
+const {Gasto} = require("../../../models");
 
 const cloudinary = require("cloudinary").v2; // Asegúrate de tener esta línea
 require("dotenv").config();
@@ -170,12 +171,27 @@ router.delete("/grupo/:grupoId", async (req, res, next) => {
           //Elimino todos los planes del itinerario
           for (const plan of planes) {
             const planId = plan.planId;
-            //Lugares del itinerario
+            //Lugar del plan
             const lugar = await Lugar.findOne({
               where: { planId },
             });
+            //Elimino el lugar asociado al plan
+             await lugar.destroy();
 
-            await lugar.destroy();
+            //Gastos del plan
+            const gastos = await Gasto.findAll({
+              where: { planId:planId },
+              });
+              //Si hay gastos asociados al plan:
+              if (gastos) {
+                for (const gasto of gastos) {
+                // const gastoId = gasto.gastoId;
+                // // Eliminar primero el gasto asociado al plan
+                // await Gasto.destroy({ where: { gastoId: gastoId } });
+                await gasto.destroy();
+                }
+              }
+            //Elimino un plan asociado al itinerario
             await plan.destroy();
           }
         }

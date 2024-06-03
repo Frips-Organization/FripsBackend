@@ -5,7 +5,7 @@ module.exports = (sequelize) => {
 
     class Gasto extends Model {
         static associate(models) {
-            this.belongsTo(models.Plan, {foreignKey: "planId"});
+            this.belongsTo(models.Plan, {foreignKey: "planId", onDelete: 'CASCADE'});
             this.belongsTo(models.Usuario, {foreignKey: "userId"});
           }
           static modelName = "Gasto";

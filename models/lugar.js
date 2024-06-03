@@ -9,7 +9,7 @@ module.exports = (sequelize) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.belongsTo(models.Plan, {foreignKey: "planId"});
+      this.belongsTo(models.Plan, {foreignKey: "planId", onDelete: 'CASCADE',  onUpdate: 'CASCADE'});
     }
 
     static modelName = "Lugar";

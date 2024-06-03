@@ -85,21 +85,33 @@ router.delete("/itinerario/:itinerarioId", async (req, res) => {
       //Elimino todos los planes del itinerario
       for (const plan of planes) {
         const planId = plan.planId;
-        //Lugares del itinerario
+        //Lugares de este plan asociado al itinerario
         const lugar = await Lugar.findOne({
           where: { planId },
         });
-
-        await lugar.destroy();
+         //Elimino el lugar asociado al plan
+          await lugar.destroy();
+            //Gastos del plan
+            const gastos = await Gasto.findAll({
+            where: { planId:planId },
+            });
+            //Si hay gastos asociados al plan:
+            if (gastos) {
+              for (const gasto of gastos) {
+              // const gastoId = gasto.gastoId;
+              // // Eliminar primero el gasto asociado al plan
+              // await Gasto.destroy({ where: { gastoId: gastoId } });
+              await gasto.destroy();
+              }
+            }
         await plan.destroy();
       }
-    }
 
     //Elimina el itinerario
     await itinerario.destroy();
 
     res.status(200).send("Itinerario eliminado correctamente");
-  } catch (error) {
+  }} catch (error) {
     console.error(error);
     res.status(500).send("Error interno del servidor");
   }

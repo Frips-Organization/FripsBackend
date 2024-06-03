@@ -127,16 +127,28 @@ router.delete("/plan/:planId", async (req, res, next) => {
       return res.status(404).send("Plan not found");
     }
 
+    //Gastos del plan
+    const gastos = await Gasto.findAll({
+      where: { planId },
+    });
+
+    //Si hay gastos asociados al plan:
+    if (gastos) {
+      for (const gasto of gastos) {
+        const gastoId = gasto.gastoId;
+        // Eliminar primero el gasto asociado al plan
+        await Gasto.destroy({ where: { gastoId: gastoId } });
+    }
+
     // Eliminar primero el lugar asociado al plan
     await Lugar.destroy({ where: { nombre: plan.nombreLugar } });
-    // Eliminar primero el gasto asociado al plan
-    await Gasto.destroy({ where: { planId: plan.planId } });
+    
 
     // Luego elimina la relación del plan con el itinerario
     plan.itinerarioId = null;
     await plan.save();
 
-    // Finalmente, elimina el plan
+    //Finalmente, elimina el plan
     await plan.destroy();
 
     res
@@ -144,7 +156,7 @@ router.delete("/plan/:planId", async (req, res, next) => {
       .send(
         `Plan with ID ${planId} and its associated place deleted successfully`
       );
-  } catch (error) {
+  }} catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
   }
