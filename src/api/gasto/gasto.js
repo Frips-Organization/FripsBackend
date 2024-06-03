@@ -85,28 +85,19 @@ router.get(
   }
 );
 
-
-//Calcula el gasto total de todos los usuarios en un itinerario
+//Calcula los gastos de todos los usuarios en un itinerario
 router.get("/gasto/itinerario/:itinerarioId", async (req, res, next) => {
   const { itinerarioId } = req.params;
-
   try {
-    // Sumar todos los gastos en los planes del itinerario
+    // Sumar los gastos en los planes del itinerario
     const result = await Gasto.findOne({
-      include: [
-        {
-          model: Plan,
-          where: { itinerarioId },
-          attributes: [], // No necesitamos seleccionar ningún campo del modelo Plan
-          required: true,
-        },
-        {
-          model: Itinerario,
-          where: { itinerarioId },
-          attributes: ['fecha'], // Incluir la propiedad de fecha del itinerario
-          required: true,
-        }
-      ],
+      include: {
+        model: Plan,
+        where: { itinerarioId },
+        attributes: [], // No necesitamos seleccionar ningún campo del modelo Plan
+        required: true,
+      },
+      //Esto un Join junto con un SUM que ya me trae la suma de montos que estoy buscando
       attributes: [
         [
           Sequelize.fn(
@@ -122,15 +113,13 @@ router.get("/gasto/itinerario/:itinerarioId", async (req, res, next) => {
 
     // Obtener el monto total de gastos
     const totalGastos = result ? result.totalGastos : 0;
-    const fechaItinerario = result ? result["Itinerario.fecha"] : null;
 
-    res.json({ totalGastos, fechaItinerario });
+    res.json({ totalGastos });
   } catch (error) {
     console.error("Error fetching gastos from Itinerario:", error);
     res.status(500).send("Internal Server Error");
   }
 });
-
 
 router.delete("/gasto/:gastoId", async (req, res, next) => {
   const { gastoId } = req.params;
@@ -153,7 +142,5 @@ router.delete("/gasto/:gastoId", async (req, res, next) => {
     res.status(500).send("Internal Server Error");
   }
 });
-
-
 
 module.exports = router;

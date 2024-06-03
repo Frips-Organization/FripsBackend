@@ -5,6 +5,7 @@ const { Grupo } = require("../../../models");
 const { Plan } = require("../../../models");
 const { Lugar } = require("../../../models");
 const { Gasto } = require("../../../models");
+const { Usuario } = require("../../../models");
 const { where } = require("sequelize");
 
 const router = express.Router();
@@ -46,6 +47,11 @@ router.get("/itinerario/:grupoId", async (req, res, next) => {
               include: [
                 {
                   model: Gasto,
+                  include: [
+                    {
+                      model: Usuario,
+                    },
+                  ],
                 },
               ],
             },
@@ -89,29 +95,30 @@ router.delete("/itinerario/:itinerarioId", async (req, res) => {
         const lugar = await Lugar.findOne({
           where: { planId },
         });
-         //Elimino el lugar asociado al plan
-          await lugar.destroy();
-            //Gastos del plan
-            const gastos = await Gasto.findAll({
-            where: { planId:planId },
-            });
-            //Si hay gastos asociados al plan:
-            if (gastos) {
-              for (const gasto of gastos) {
-              // const gastoId = gasto.gastoId;
-              // // Eliminar primero el gasto asociado al plan
-              // await Gasto.destroy({ where: { gastoId: gastoId } });
-              await gasto.destroy();
-              }
-            }
+        //Elimino el lugar asociado al plan
+        await lugar.destroy();
+        //Gastos del plan
+        const gastos = await Gasto.findAll({
+          where: { planId: planId },
+        });
+        //Si hay gastos asociados al plan:
+        if (gastos) {
+          for (const gasto of gastos) {
+            // const gastoId = gasto.gastoId;
+            // // Eliminar primero el gasto asociado al plan
+            // await Gasto.destroy({ where: { gastoId: gastoId } });
+            await gasto.destroy();
+          }
+        }
         await plan.destroy();
       }
 
-    //Elimina el itinerario
-    await itinerario.destroy();
+      //Elimina el itinerario
+      await itinerario.destroy();
 
-    res.status(200).send("Itinerario eliminado correctamente");
-  }} catch (error) {
+      res.status(200).send("Itinerario eliminado correctamente");
+    }
+  } catch (error) {
     console.error(error);
     res.status(500).send("Error interno del servidor");
   }
