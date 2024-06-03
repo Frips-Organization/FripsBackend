@@ -4,6 +4,7 @@ const { Itinerario } = require("../../../models");
 const { Grupo } = require("../../../models");
 const { Plan } = require("../../../models");
 const { Lugar } = require("../../../models");
+const { Gasto } = require("../../../models");
 const { where } = require("sequelize");
 
 const router = express.Router();
@@ -39,6 +40,16 @@ router.get("/itinerario/:grupoId", async (req, res, next) => {
       include: [
         {
           model: Itinerario,
+          include: [
+            {
+              model: Plan,
+              include: [
+                {
+                  model: Gasto,
+                },
+              ],
+            },
+          ],
         },
       ],
     });
