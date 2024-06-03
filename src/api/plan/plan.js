@@ -17,6 +17,7 @@ router.post("/plan", async (req, res) => {
     horaSalida,
     puntoPartida,
     motivo,
+    ubicacion,
   } = req.body;
   //let createdAt pueden ser null y definirse despues
   //let updatedAt
@@ -40,7 +41,7 @@ router.post("/plan", async (req, res) => {
       nombre: nombreLugar,
       planId: plan.planId,
       descripcion: "sin descripcion", //Estos son valores por defecto para un nuevo lugar
-      ubicacion: "sin especificar",
+      coordenadas: ubicacion,
     });
 
     res.status(201).send("Created");
@@ -89,6 +90,11 @@ router.get("/grupo/:grupoId/planes", async (req, res, next) => {
       include: [
         {
           model: Plan,
+          include: [
+            {
+              model: Lugar,
+            },
+          ],
         },
       ],
     });
@@ -138,25 +144,25 @@ router.delete("/plan/:planId", async (req, res, next) => {
         const gastoId = gasto.gastoId;
         // Eliminar primero el gasto asociado al plan
         await Gasto.destroy({ where: { gastoId: gastoId } });
+      }
+
+      // Eliminar primero el lugar asociado al plan
+      await Lugar.destroy({ where: { nombre: plan.nombreLugar } });
+
+      // Luego elimina la relación del plan con el itinerario
+      plan.itinerarioId = null;
+      await plan.save();
+
+      //Finalmente, elimina el plan
+      await plan.destroy();
+
+      res
+        .status(200)
+        .send(
+          `Plan with ID ${planId} and its associated place deleted successfully`
+        );
     }
-
-    // Eliminar primero el lugar asociado al plan
-    await Lugar.destroy({ where: { nombre: plan.nombreLugar } });
-    
-
-    // Luego elimina la relación del plan con el itinerario
-    plan.itinerarioId = null;
-    await plan.save();
-
-    //Finalmente, elimina el plan
-    await plan.destroy();
-
-    res
-      .status(200)
-      .send(
-        `Plan with ID ${planId} and its associated place deleted successfully`
-      );
-  }} catch (error) {
+  } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
   }
