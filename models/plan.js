@@ -7,8 +7,8 @@ module.exports = (sequelize) => {
       // Definir las asociaciones aquí
       this.belongsTo(models.Usuario, { foreignKey: "userId" });
       this.belongsTo(models.Itinerario, { foreignKey: "itinerarioId" });
-      this.hasOne(models.Lugar, {foreignKey: "planId" });
-      this.hasMany(models.Gasto, {foreignKey: "planId"});
+      this.hasOne(models.Lugar, {foreignKey: "planId",  onDelete: 'CASCADE', onUpdate: 'CASCADE'});
+      this.hasMany(models.Gasto, {foreignKey: "planId", onDelete: 'CASCADE'});
       this.belongsTo(models.Calendario, {
         foreignKey: "planId",
         allowNull: true,

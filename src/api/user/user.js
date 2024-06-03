@@ -2,6 +2,7 @@ const express = require("express");
 const db = require("../../../models");
 const {Usuario} = require("../../../models");
 const router = express.Router();
+
 router.get("/user", async (req, res,next) => {
     let userId = req.body.userId;
     await Usuario.findOne({userId: userId})
@@ -9,12 +10,6 @@ router.get("/user", async (req, res,next) => {
         .catch((error)=> res.status(400).send({error: "Usuario no encontrado"})).then(next);
 
 })
-
-
-
-
-
-
 
 
 module.exports = router;

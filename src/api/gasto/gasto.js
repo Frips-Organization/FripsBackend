@@ -118,6 +118,8 @@ router.get("/gasto/itinerario/:itinerarioId", async (req, res, next) => {
   }
 });
 
+//
+
 router.delete("/gasto/:gastoId", async (req, res, next) => {
   const { gastoId } = req.params;
   try {
@@ -139,5 +141,7 @@ router.delete("/gasto/:gastoId", async (req, res, next) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
+
 
 module.exports = router;
