@@ -15,9 +15,9 @@
   },
   "production": {
     "username": "fripsdb",
-    "password": "Ab8BUYl62fUMGYdnmQti4uTX1vghyTOr",
-    "database": "fripsdb",
-    "host": "dpg-cp3eoafsc6pc73fng470-a",
+    "password": "shf3N1NoC6SwZqFodbF2hmtLVjniKnRv",
+    "database": "fripsdb_6e5d",
+    "host": "dpg-cpf9lnn109ks73bfs510-a",
     "dialect": "postgres"
   }
 }
